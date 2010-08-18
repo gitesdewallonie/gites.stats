@@ -1,0 +1,2 @@
+CREATE USER test WITH PASSWORD 'test' CREATEDB;
+CREATE DATABASE gites_wallons_test OWNER test;
