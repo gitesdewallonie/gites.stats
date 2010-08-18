@@ -22,6 +22,14 @@ setup(name='gdw.stats',
       namespace_packages=['gdw'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+            test=['zope.testing', 'mockito', 'psycopg2']),
       install_requires=[
           'setuptools',
-      ])
+          'Zope2',
+          'z3c.form',
+          'z3c.autoinclude',
+          'affinitic.db',
+          'gites.db',
+          'dateutil',
+          'sqlalchemy'])
