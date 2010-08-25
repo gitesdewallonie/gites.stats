@@ -12,7 +12,6 @@ from zope.component import getUtilitiesFor
 from zope.app.testing.functional import ZCMLLayer as _ZCMLLayer
 from affinitic.db.pg import PGDB
 from affinitic.db.interfaces import IDatabase
-from sqlalchemy.engine import default
 from sqlalchemy import orm
 
 
@@ -63,16 +62,11 @@ def eq_(a, b, msg=None):
 
 class AssertsCompiledSQL(object):
 
-    def assert_compile(self, clause, result, params=None, checkparams=None, dialect=None, use_default_dialect=False):
-        if use_default_dialect:
-            dialect = default.DefaultDialect()
-
+    def assert_compile(self, clause, result, params=None, checkparams=None, dialect=None):
         if dialect is None:
             dialect = getattr(self, '__dialect__', None)
 
         kw = {}
-        if params is not None:
-            kw['column_keys'] = params.keys()
         if isinstance(clause, orm.Query):
             context = clause._compile_context()
             context.statement.use_labels = True

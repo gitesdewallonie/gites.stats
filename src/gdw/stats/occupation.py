@@ -12,6 +12,8 @@ from gites.db.content import (ReservationProprio,
                               Hebergement)
 from gdw.stats.utils import nbrOfDaysInRange
 from gdw.stats.inactive import HebergementInactiveCalculation
+from sqlalchemy.orm import Query
+Query.__len__ = Query.count
 
 
 class HebergementOccupation(object):
@@ -23,7 +25,7 @@ class HebergementOccupation(object):
         self.endDate = endDate
         self.maxInactifDays = maxInactifDays
 
-    def nombreJoursOccupe(self):
+    def nombreJoursOccupes(self):
         db = getUtility(IDatabase, name='postgres')
         session = db.session
         query = session.query(ReservationProprio).join('hebergement')
@@ -37,7 +39,7 @@ class HebergementOccupation(object):
 
     @property
     def taux(self):
-        return self.nombreJoursOccupe() / nbrOfDaysInRange(self.startDate, self.endDate)
+        return self.nombreJoursOccupes() / nbrOfDaysInRange(self.startDate, self.endDate)
 
     def isActif(self):
         inactiveCalc = HebergementInactiveCalculation(self.hebergement.heb_pk, self.startDate, self.endDate)
@@ -65,17 +67,28 @@ class HebergementsOccupation(object):
         for heb in self.hebergements:
             hebOccupation = HebergementOccupation(heb, self.startDate, self.endDate, self.maxInactifDays)
             if hebOccupation.isActif():
-                yield heb
+                yield hebOccupation
 
-    def hebergementInactifCount(self):
-        return self.hebergementCount - len(self.hebergementsActif)
+    @property
+    def hebergementsActifCount(self):
+        return len([heb for heb in self.hebergementsActif])
+
+    @property
+    def hebergementsInactifCount(self):
+        return self.hebergementCount - len([heb for heb in self.hebergementsActif])
 
     @property
     def taux(self):
         taux = 0.0
         hebCount = 0
-        for heb in self.hebergementsActif:
-            hebOccupation = HebergementOccupation(heb, self.startDate, self.endDate)
+        for hebOccupation in self.hebergementsActif:
             taux += hebOccupation.taux
             hebCount += 1
         return taux / hebCount
+
+    @property
+    def nombreJoursOccupes(self):
+        nbrJourOccupe = 0
+        for hebOccupation in self.hebergementsActif:
+            nbrJourOccupe += hebOccupation.nombreJoursOccupes()
+        return nbrJourOccupe

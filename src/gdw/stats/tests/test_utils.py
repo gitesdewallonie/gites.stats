@@ -8,6 +8,7 @@ Copyright by Affinitic sprl
 from unittest import TestCase
 from datetime import datetime
 from gdw.stats.utils import nbrOfDaysInRange
+from gdw.stats import initialize
 
 
 class TestUtils(TestCase):
@@ -21,3 +22,6 @@ class TestUtils(TestCase):
         minDate = datetime(2010, 10, 11)
         maxDate = datetime(2010, 10, 1)
         self.assertRaises(AssertionError, nbrOfDaysInRange, minDate, maxDate)
+
+    def testCoverage(self):
+        initialize(context=None)
