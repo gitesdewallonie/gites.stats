@@ -24,6 +24,9 @@ setup(name='gdw.stats',
       zip_safe=False,
       extras_require=dict(
             test=['zope.testing', 'mockito', 'psycopg2']),
+      entry_points={
+            'console_scripts': [
+                'gdwstats = gdw.stats.cmdline:main']},
       install_requires=[
           'setuptools',
           'Zope2',
@@ -32,4 +35,6 @@ setup(name='gdw.stats',
           'affinitic.db',
           'gites.db',
           'dateutil',
+          'grokcore.component',
+          'psycopg2',
           'sqlalchemy'])

@@ -1,12 +1,14 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
-           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:grok="http://namespaces.zope.org/grok"
            i18n_domain="gdw.stats">
 
-  <five:registerPackage package="." initialize=".initialize" />
+  <!-- five:registerPackage package="." initialize=".initialize" / -->
 
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includeDependencies package="." />
+
+  <grok:grok package="gites.db.pg"/>
+  <grok:grok package="gdw.stats.mapper"/>
 
   <include package=".browser"/>
 

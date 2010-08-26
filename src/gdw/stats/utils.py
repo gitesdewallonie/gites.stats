@@ -37,3 +37,12 @@ element.columns)
 
 def overlaps(a_pair, b_pair):
     return TupleClause(*a_pair).op('OVERLAPS')(TupleClause(*b_pair))
+
+
+from zope.configuration import xmlconfig
+
+
+def parseZCML(package, filename='configure.zcml'):
+    context = xmlconfig._getContext()
+    xmlconfig.include(context, filename, package)
+    context.execute_actions()
