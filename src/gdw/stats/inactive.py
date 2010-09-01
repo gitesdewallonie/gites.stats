@@ -24,7 +24,8 @@ class HebergementInactiveCalculation(object):
         query = session.query(BlockingHistory)
         query = query.filter(BlockingHistory.heb_pk == self.hebId)
         query = query.filter(overlaps((BlockingHistory.block_start,
-BlockingHistory.block_end), (self.startDate, self.endDate)))
+                                       BlockingHistory.block_end),
+                                      (self.startDate, self.endDate)))
         return query
 
     @property

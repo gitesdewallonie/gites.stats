@@ -51,7 +51,7 @@ class HebergementOccupation(object):
 
 class HebergementsOccupation(object):
 
-    def __init__(self, hebergements, startDate, endDate, maxInactifDays=99999):
+    def __init__(self, hebergements, startDate, endDate, maxInactifDays=1):
         assert startDate < endDate
         self.hebergements = hebergements
         self.startDate = startDate
