@@ -23,7 +23,7 @@ setup(name='gdw.stats',
       include_package_data=True,
       zip_safe=False,
       extras_require=dict(
-            test=['zope.testing', 'mockito', 'psycopg2']),
+            test=['zope.testing', 'mockito', 'psycopg2', 'plone.app.testing', 'lxml']),
       entry_points={
             'console_scripts': [
                 'gdwstats = gdw.stats.cmdline:main']},
@@ -39,5 +39,6 @@ setup(name='gdw.stats',
           'psycopg2',
           'plone.z3cform',
           'Plone',
+          'PIL',
           'plone.app.z3cform',
           'sqlalchemy'])

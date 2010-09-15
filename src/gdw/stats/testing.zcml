@@ -1,11 +1,11 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
            xmlns:grok="http://namespaces.zope.org/grok"
            i18n_domain="gites">
 
     <include package="zope.component" file="meta.zcml" />
     <include package="zope.component" file="configure.zcml" />
     <include package="grokcore.component" file="meta.zcml" />
-
     <grok:grok package="gdw.stats.testing"/>
     <grok:grok package="gdw.stats.mapper"/>
 
