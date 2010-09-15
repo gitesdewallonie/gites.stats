@@ -37,4 +37,7 @@ setup(name='gdw.stats',
           'dateutil',
           'grokcore.component',
           'psycopg2',
+          'plone.z3cform',
+          'Plone',
+          'plone.app.z3cform',
           'sqlalchemy'])
