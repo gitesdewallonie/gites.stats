@@ -1,0 +1,12 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:grok="http://namespaces.zope.org/grok"
+           i18n_domain="gites">
+
+    <include package="z3c.autoinclude" file="meta.zcml" />
+    <includeDependencies package="gdw.stats" />
+    <five:registerPackage package="gdw.stats" initialize="gdw.stats.initialize" />
+    <grok:grok package="gdw.stats.mapper"/>
+    <include package="gdw.stats.browser"/>
+
+</configure>

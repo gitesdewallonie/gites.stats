@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone.z3cform">
+<body>
+
+  <metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+      Taux d'occupation: <span tal:content="view/tauxOccupation"/><br/>
+      Nombre de jour occupés: <span tal:content="view/nombreJoursOccupes"/><br/>
+      Nombre d'hébergements selectionné: <span tal:content="view/hebergementConcernes"/><br/>
+      Nombre d'hébergements actifs: <span tal:content="view/hebergementsActifCount"/><br/>
+      Nombre d'hébergements inactifs: <span tal:content="view/hebergementsInactifCount"/><br/>
+    </tal:main-macro>
+</metal:main>
+</body>
+</html>

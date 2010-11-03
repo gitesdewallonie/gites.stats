@@ -1,0 +1,46 @@
+
+    >>> app = layer['app']
+    >>> from plone.testing import z2
+    >>> browser = z2.Browser(app)
+    >>> browser.handleErrors = False
+    >>> app_url = app.absolute_url()
+    >>> from urlparse import urljoin
+    >>> statPage = urljoin(urljoin(app_url, 'plone/'), 'stats')
+    >>> browser.open(statPage)
+    >>> browser.getControl('Calculer').click()
+    >>> from gdw.stats.tests.utils import queryHTML
+    >>> print queryHTML('//div[@class="portalMessage"]', browser.contents)[0]
+    <div class="portalMessage">There were some errors.</div>
+
+Let's create a real request:
+
+    >>> from z3c.form.testing import TestRequest
+    >>> request = TestRequest()
+    >>> request.form['form.widgets.unitProdSource-empty-marker'] = u'1'
+    >>> request.form['form.widgets.date_max-month'] = u'1'
+    >>> request.form['form.widgets.date_min-empty-marker'] = u'1'
+    >>> request.form['form.widgets.date_max-year'] = u''
+    >>> request.form['form.widgets.date_min-year'] = u''
+    >>> request.form['form.buttons.calculer'] = u'Calculer'
+    >>> request.form['form.widgets.date_max-empty-marker'] = u'1'
+    >>> request.form['form.widgets.capaciteMax'] = u''
+    >>> request.form['form.widgets.hebType-empty-marker'] = u''
+    >>> request.form['form.widgets.classement-empty-marker'] = u'1'
+    >>> request.form['form.widgets.province'] = [u'--NOVALUE--']
+    >>> request.form['form.widgets.nombre_jour'] = u''
+    >>> request.form['form.widgets.date_max-day'] = u''
+    >>> request.form['form.widgets.maisonTourisme'] = [u'--NOVALUE--']
+    >>> request.form['form.widgets.commune'] = [u'--NOVALUE--']
+    >>> request.form['form.widgets.date_min-month'] = u'1'
+    >>> request.form['form.widgets.commune-empty-marker'] = u'1'
+    >>> request.form['form.widgets.classement'] = [u'--NOVALUE--']
+    >>> request.form['form.widgets.province-empty-marker'] = u'1'
+    >>> request.form['form.widgets.capaciteMin'] = u''
+    >>> request.form['form.widgets.maisonTourisme-empty-marker'] = u'1'
+    >>> request.form['form.widgets.date_min-day'] = u''
+
+    >>> from zope.component import getMultiAdapter
+    >>> statsForm = getMultiAdapter((app.plone, request), name='stats')
+    >>> statsForm.update()
+    >>> statsForm.form_instance.status
+    u'There were some errors.'

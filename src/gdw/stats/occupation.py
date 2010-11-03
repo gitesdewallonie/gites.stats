@@ -41,7 +41,18 @@ class HebergementOccupation(object):
     def taux(self):
         return self.nombreJoursOccupes() / nbrOfDaysInRange(self.startDate, self.endDate)
 
+    def hasBeenActive(self):
+        db = getUtility(IDatabase, name='postgres')
+        session = db.session
+        query = session.query(ReservationProprio).join('hebergement')
+        query = query.filter(Hebergement.heb_pk == self.hebergement.heb_pk)
+        count = query.count()
+        session.close()
+        return (count > 0)
+
     def isActif(self):
+        if not self.hasBeenActive():
+            return False
         inactiveCalc = HebergementInactiveCalculation(self.hebergement.heb_pk, self.startDate, self.endDate)
         return len(inactiveCalc.inactiveDaysOverRange) < self.maxInactifDays
 
@@ -84,6 +95,8 @@ class HebergementsOccupation(object):
         for hebOccupation in self.hebergementsActif:
             taux += hebOccupation.taux
             hebCount += 1
+        if hebCount == 0:
+            return 0.0
         return taux / hebCount
 
     @property
