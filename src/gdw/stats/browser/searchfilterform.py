@@ -36,6 +36,10 @@ class StatForm(Form):
         if data.get('maisonTourisme'):
             query = query.join('maisonTourisme')
             query = query.filter(MaisonTourisme.mais_pk == data.get('maisonTourisme'))
+        if data.get('capaciteMax'):
+            query = query.filter(Hebergement.heb_cgt_cap_max <= data.get('capaciteMax'))
+        if data.get('capaciteMin'):
+            query = query.filter(Hebergement.heb_cgt_cap_min >= data.get('capaciteMin'))
         return query
 
     def update(self):
