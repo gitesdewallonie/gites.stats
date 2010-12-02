@@ -3,14 +3,20 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="gdw.stats">
 
-        <browser:page
-          for="*"
-          permission="zope2.View"
-          class=".searchfilterform.StatFormView"
-          name="stats"
-        />
+    <browser:page
+      for="*"
+      permission="zope2.View"
+      class=".searchfilterform.StatFormView"
+      name="stats"
+    />
 
-        <grok:grok package=".vocabulary"/>
+    <browser:page
+      for="*"
+      permission="zope2.View"
+      class=".hebfilterform.StatFormView"
+      name="heb-analytics"
+    />
+
+    <grok:grok package=".vocabulary"/>
 
 </configure>
-

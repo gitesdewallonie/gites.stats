@@ -1,0 +1,21 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:grok="http://namespaces.zope.org/grok"
+           xmlns:passmgr="http://affinitic.be/passmgr"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           i18n_domain="gdw.stats">
+
+  <include package="zope.component" file="meta.zcml" />
+  <include package="zope.component" file="configure.zcml" />
+  <include package="grokcore.component" file="meta.zcml"/>
+  <include package="affinitic.pwmanager"/>
+
+  <passmgr:pwdfile
+      name="pg"
+      filename="pgpass"/>
+
+  <grok:grok package="gites.db.pg"/>
+  <grok:grok package="gdw.stats.mapper"/>
+
+</configure>

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.2dev'
+version = '0.1'
 
 setup(name='gdw.stats',
       version=version,
@@ -26,7 +26,8 @@ setup(name='gdw.stats',
             test=['zope.testing', 'mockito', 'psycopg2', 'plone.app.testing', 'lxml']),
       entry_points={
             'console_scripts': [
-                'gdwstats = gdw.stats.cmdline:main']},
+                'gdwstats = gdw.stats.cmdline:main',
+                'log2db = gdw.stats.scripts.log2db:main']},
       install_requires=[
           'setuptools',
           'Zope2',
@@ -41,4 +42,5 @@ setup(name='gdw.stats',
           'Plone',
           'PIL',
           'plone.app.z3cform',
-          'sqlalchemy'])
+          'sqlalchemy',
+          'apachelog'])

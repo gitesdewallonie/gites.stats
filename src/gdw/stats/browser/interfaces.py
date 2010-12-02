@@ -12,7 +12,7 @@ from zope.schema import Choice, Date, Int, Tuple
 class ISearchFilterForm(Interface):
 
     @invariant
-    def isLoginPartOfEmail(search):
+    def isBadDateRange(search):
         if search.date_min > search.date_max:
             raise Invalid("Date de début supérieure à la date de fin")
 
@@ -77,3 +77,26 @@ class ISearchFilterForm(Interface):
 #                        required=True,
 #                        value_type=Choice(title=u"animal",
 #                                          vocabulary="cerise.user.Animal"))
+
+
+class IHebFilterForm(Interface):
+
+    @invariant
+    def isBadDateRange(search):
+        if search.date_min > search.date_max:
+            raise Invalid("Date de début supérieure à la date de fin")
+
+    hebPk = Int(
+        title=u"Référence de l'hébergement",
+        description=u"",
+        required=True)
+
+    date_min = Date(
+        title=u"Date de début",
+        description=u"",
+        required=True)
+
+    date_max = Date(
+        title=u"Date de fin",
+        description=u"",
+        required=True)
