@@ -12,19 +12,27 @@ import time
 import urlparse
 
 from datetime import datetime
-from gites.db.content import LogItem
+from gites.db.content import LogItem, Hebergement
 from gdw.stats.scripts.config import (ROBOTS, FORMAT, SKIP_TYPES,
                                       VALID_HTTP_CODE, SKIP_HOSTS,
                                       getConfig)
 from gdw.stats.utils import parseZCML
 from affinitic.db import IDatabase
 from zope.component import getUtility
+from plone.memoize.forever import memoize
 from sqlalchemy import select, func
 
 
-def getMaxDate():
-    db = getUtility(IDatabase, 'postgres')
-    return select([func.max(LogItem.log_date)]).execute().fetchone()
+def getMaxDate(website):
+    return select([func.max(LogItem.log_date)],
+                  LogItem.log_website == website).execute().fetchone()
+
+
+@memoize
+def getHebPkFromId(hebId):
+    heb = select([Hebergement.heb_pk],
+                   Hebergement.heb_id == hebId).execute().fetchone()
+    return heb.heb_pk
 
 
 def main():
@@ -33,8 +41,8 @@ def main():
     db = getUtility(IDatabase, 'postgres')
     session = db.session
     p = apachelog.parser(FORMAT)
-    logfilePath = getConfig()
-    maxDate = getMaxDate().max_1
+    logfilePath, website = getConfig()
+    maxDate = getMaxDate(website).max_1
     if maxDate is None:
         maxDate = datetime(1970, 1, 1)
     cpt = 0
@@ -93,9 +101,10 @@ def main():
             logline = LogItem()
             logline.log_date = date
             logline.log_path = path
-            logline.log_hebid = hebid
+            logline.log_hebpk = getHebPkFromId(hebid)
             logline.log_host = host
             logline.log_agent = agent
+            logline.log_website = website
             session.add(logline)
             maxDate = date
     session.flush()

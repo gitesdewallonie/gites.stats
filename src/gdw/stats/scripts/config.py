@@ -54,8 +54,9 @@ ROBOTS = [
 
 def getConfig():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hf:", ["help",
-                                                         "file="])
+        opts, args = getopt.getopt(sys.argv[1:], "hf:w:", ["help",
+                                                           "file=",
+                                                           "website="])
     except getopt.GetoptError, err:
         print str(err)
         usage()
@@ -67,11 +68,15 @@ def getConfig():
             sys.exit()
         elif o in ("-f", "--file"):
             filepath = value
+        elif o in ("-w", "--website"):
+            if value not in ['gdw', 'bnb']:
+                raise 'Website must be in gdw or bnb'
+            website = value
         else:
             assert False, "unhandled option"
-    if filepath is None:
+    if filepath is None or website is None:
         raise getopt.GetoptError('missing file option')
-    return filepath
+    return filepath, website
 
 
 def usage():
