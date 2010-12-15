@@ -7,16 +7,16 @@
       for="*"
       permission="zope2.View"
       class=".searchfilterform.StatFormView"
-      name="stats"
-    />
+      name="stats"/>
 
     <browser:page
       for="*"
       permission="zope2.View"
       class=".hebfilterform.StatFormView"
       name="heb-analytics"
-    />
+      />
 
+    <grok:grok package=".hebfilterform"/>
     <grok:grok package=".vocabulary"/>
 
 </configure>

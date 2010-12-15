@@ -14,27 +14,8 @@
             pour la période <i tal:content="view/period" />.
         </h2>
 
-        <p>&nbsp;</p>
+        <div tal:content="structure provider:stats.content"/>
 
-        <span tal:define="stats view/stats">
-            <table class="listing">
-            	<thead>
-            		<tr>
-            			<th>Date</th>
-            			<th>Nombre de visites</th>
-            			<th>Visiteurs uniques</th>
-            		</tr>
-            	</thead>
-            	<tbody>
-            		<tr tal:repeat="stat stats">
-            			<th><span tal:replace="python: stat['date'].strftime('%d-%m-%Y')" /></th>
-            			<td><span tal:replace="stat/visit" /></td>
-            			<td><span tal:replace="stat/unique" /></td>
-            		</tr>
-            	</tbody>
-            </table>
-        </span>
-        
     </tal:main-macro>
 </metal:main>
 </body>

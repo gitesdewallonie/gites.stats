@@ -5,39 +5,75 @@ gdw.stats
 Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
-from sets import Set
-from dateutil.relativedelta import relativedelta
+#from sets import Set
+#from dateutil.relativedelta import relativedelta
+from five import grok
+from zope.interface import Interface
 from z3c.form.form import Form, EditForm
 from z3c.form import field, button
 from z3c.sqlalchemy import getSAWrapper
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate, ViewPageTemplateFile
-from gites.db.content import Hebergement, LogItem
+from Products.statusmessages.interfaces import IStatusMessage
+from gites.db.content import Hebergement
 from gdw.stats.browser.interfaces import IHebFilterForm
+from gdw.stats.visits import StatContainer
+
+
+grok.templatedir('templates')
+grok.context(Interface)
+
+
+class StatViewlet(grok.Viewlet):
+    grok.baseclass()
+    grok.template('statviewlet')
+    groupType = None
+
+    title = None
+
+    def stats(self):
+        minDate = self.view.form_instance.dateRange[0]
+        maxDate = self.view.form_instance.dateRange[1]
+        hebPk = self.view.form_instance.hebPk
+        return StatContainer(hebPk, minDate, maxDate, self.groupType)
+
+
+class DailyStatViewlet(StatViewlet):
+    grok.order(1)
+    title = u'Statistique par jour'
+    groupType = 'day'
+
+
+class MonthlyStatViewlet(StatViewlet):
+    grok.order(2)
+    title = u'Statistique par mois'
+    groupType = 'month'
+
+
+class YearlyStatViewlet(StatViewlet):
+    grok.order(3)
+    title = u'Statistique par an'
+    groupType = 'year'
+
+
+class StatsContentViewletManager(grok.ViewletManager):
+    grok.name('stats.content')
+
+grok.viewletmanager(StatsContentViewletManager)
 
 
 class StatForm(Form):
     """formulaire"""
     fields = field.Fields(IHebFilterForm)
     ignoreContext = True
+    hebPk = None
 
     def findHeb(self, hebPk):
         wrapper = getSAWrapper('gites_wallons')
         session = wrapper.session
         query = session.query(Hebergement)
         query = query.filter(Hebergement.heb_pk == hebPk)
-        return query.one()
-
-    def filterHebLogs(self, hebId, minDate, maxDate):
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        maxDate = maxDate + relativedelta(days=1)
-        query = session.query(LogItem)
-        query = query.filter(LogItem.log_hebid == hebId)
-        query = query.filter(LogItem.log_date >= minDate)
-        query = query.filter(LogItem.log_date < maxDate)
-        query = query.order_by()
-        return query.all()
+        return query.first()
 
     def update(self):
         self.stats = None
@@ -53,24 +89,13 @@ class StatForm(Form):
         minDate = data.get('date_min')
         maxDate = data.get('date_max')
         heb = self.findHeb(hebPk)
-        hebId = heb.heb_id
+        if heb is None:
+            msg = u'Hebergement %s introuvable' % hebPk
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return
         self.hebName = heb.heb_nom
+        self.hebPk = hebPk
         self.dateRange = [minDate, maxDate]
-        logs = self.filterHebLogs(hebId, minDate, maxDate)
-        stats = []
-        if logs:
-            log = logs.pop(0)
-            for i in range(0, (maxDate - minDate).days + 1):
-                day = minDate + relativedelta(days=i)
-                stat = {'date': day, 'visit': 0, 'unique': 0}
-                hosts = Set()
-                while log.log_date.date() == day and logs:
-                    stat['visit'] += 1
-                    hosts.add(log.log_host)
-                    log = logs.pop(0)
-                stat['unique'] = len(hosts)
-                stats.append(stat)
-        self.stats = stats
 
 
 class StatFormView(FormWrapper):
@@ -93,6 +118,6 @@ class StatFormView(FormWrapper):
 
     def update(self):
         super(StatFormView, self).update()
-        if self.form_instance.stats is not None:
+        if self.form_instance.hebPk is not None:
             pt = ViewPageTemplateFile('templates/hebstat.pt')
             self.index = BoundPageTemplate(pt, self)
