@@ -32,6 +32,13 @@ def getMaxDate(website):
 def getHebPkFromId(hebId):
     heb = select([Hebergement.heb_pk],
                    Hebergement.heb_id == hebId).execute().fetchone()
+    if heb is None:
+       heb = select([Hebergement.heb_pk],
+                    Hebergement.heb_id.like('%%%s%%' % hebId)).execute().fetchall()
+       if heb and len(heb) == 1:
+          heb = heb[0]
+       else:
+          return None
     return heb.heb_pk
 
 
@@ -53,6 +60,10 @@ def main():
             continue
         if data is None:
             continue
+        date = apachelog.parse_date(data['%t'])
+        date = datetime(*time.strptime(date[0], '%Y%m%d%H%M%S')[:6])
+        if date <= maxDate:
+	   continue
         path = re.match('(.*) (.*) (.*)', data['%r']).group(2)
         path = urlparse.urlparse(path)[2]
         # path : '/hebergement/logement/beauraing/hebid'
@@ -94,19 +105,19 @@ def main():
         cpt += 1
         if cpt % 10000 == 0:
             session.flush()
+            session.commit()
             print cpt
-        date = apachelog.parse_date(data['%t'])
-        date = datetime(*time.strptime(date[0], '%Y%m%d%H%M%S')[:6])
-        if date > maxDate:
-            logline = LogItem()
-            logline.log_date = date
-            logline.log_path = path
-            logline.log_hebpk = getHebPkFromId(hebid)
-            logline.log_host = host
-            logline.log_agent = agent
-            logline.log_website = website
-            session.add(logline)
-            maxDate = date
+        heb_pk = getHebPkFromId(hebid)
+        logline = LogItem()
+        logline.log_date = date
+        logline.log_path = path
+        logline.log_hebid = hebid
+        logline.log_hebpk = heb_pk
+        logline.log_host = host
+        logline.log_agent = agent
+        logline.log_website = website
+        session.add(logline)
+        maxDate = date
     session.flush()
     session.commit()
 
