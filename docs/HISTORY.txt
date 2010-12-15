@@ -1,10 +1,10 @@
 Changelog
 =========
 
-0.2 (unreleased)
+0.2 (2010-12-15)
 ----------------
 
-- Nothing changed yet.
+- Add visit stats
 
 
 0.1 (2010-11-17)
