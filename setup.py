@@ -40,8 +40,5 @@ setup(name='gdw.stats',
           'psycopg2',
           'plone.z3cform',
           'plone.memoize',
-          'Plone',
-          'PIL',
-          'plone.app.z3cform',
           'sqlalchemy',
           'apachelog'])
