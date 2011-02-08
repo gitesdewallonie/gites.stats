@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.2dev'
+version = '0.3dev'
 
 setup(name='gdw.stats',
       version=version,
@@ -37,6 +37,7 @@ setup(name='gdw.stats',
           'gites.db',
           'dateutil',
           'grokcore.component',
+          'five.grok',
           'psycopg2',
           'plone.z3cform',
           'plone.memoize',

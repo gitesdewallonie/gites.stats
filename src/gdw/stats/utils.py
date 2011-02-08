@@ -5,6 +5,7 @@ gdw.stats
 Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
+from datetime import datetime
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.sql import ClauseElement
 from sqlalchemy.sql.expression import _literal_as_binds, _CompareMixin
@@ -46,3 +47,11 @@ def parseZCML(package, filename='configure.zcml'):
     context = xmlconfig._getContext()
     xmlconfig.include(context, filename, package)
     context.execute_actions()
+
+
+def morning(startDate):
+    return datetime(startDate.year, startDate.month, startDate.day, 0, 0, 0)
+
+
+def evening(endDate):
+    return datetime(endDate.year, endDate.month, endDate.day, 23, 59, 59)

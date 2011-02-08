@@ -1,0 +1,29 @@
+  <h4 tal:content="viewlet/title"/>
+  <span tal:define="stats viewlet/stats">
+      <table class="listing">
+         <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>Nombre de visites</th>
+                  <th>Visiteurs uniques</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr tal:repeat="stat stats">
+                  <th><span tal:replace="stat/date" /></th>
+                  <td><span tal:replace="stat/visitCount" /></td>
+                  <td><span tal:replace="stat/uniqueVisitCount" /></td>
+              </tr>
+              <tr tal:define="totals stats/totals">
+                <td><b>Total:</b></td>
+                <td tal:content="python:totals.totalVisitCount">&nbsp;</td>
+                <td tal:content="python:totals.totalUniqueVisitCount">&nbsp;</td>
+              </tr>
+              <tr tal:define="average stats/average">
+                <td><b>Moyenne:</b></td>
+                <td tal:content="python:average.averageVisitCount">&nbsp;</td>
+                <td tal:content="python:average.averageUniqueVisitCount">&nbsp;</td>
+              </tr>
+          </tbody>
+      </table>
+  </span>
