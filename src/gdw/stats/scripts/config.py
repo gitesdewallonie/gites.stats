@@ -8,7 +8,7 @@ Copyright by Affinitic sprl
 import getopt
 import sys
 
-FORMAT = r'%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
+FORMAT = r'%z %w %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
 SKIP_HOSTS = []
 VALID_HTTP_CODE = [200, 304]
 SKIP_TYPES = ['.css', '.js', '.class', '.gif', '.jpg', '.jpeg', '.png', '.bmp',
