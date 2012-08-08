@@ -27,6 +27,7 @@ setup(name='gdw.stats',
       entry_points={
             'console_scripts': [
                 'gdwstats = gdw.stats.cmdline:main',
+                'gdwhebstats = gdw.stats.hebstatcmdline:main',
                 'log2db = gdw.stats.scripts.log2db:main']},
       install_requires=[
           'setuptools',
