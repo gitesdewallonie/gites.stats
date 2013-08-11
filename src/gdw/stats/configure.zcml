@@ -9,7 +9,6 @@
   <includeDependencies package="." />
 
   <grok:grok package="gites.db.pg"/>
-  <grok:grok package="gdw.stats.mapper"/>
 
   <include package=".browser"/>
 

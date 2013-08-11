@@ -8,7 +8,7 @@ Copyright by Affinitic sprl
 from zope.interface import implements
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
-from zope.app.schema.vocabulary import IVocabularyFactory
+from zope.schema.interfaces import IVocabularyFactory
 from z3c.sqlalchemy import getSAWrapper
 import grokcore.component as grok
 from gites.db.content import Province, MaisonTourisme, Commune, TypeHebergement
