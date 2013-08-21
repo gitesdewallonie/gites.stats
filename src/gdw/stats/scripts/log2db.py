@@ -13,11 +13,13 @@ import urlparse
 
 from datetime import datetime
 from gites.db.content import LogItem, Hebergement
+from gites.db import DeclarativeBase
 from gdw.stats.scripts.config import (ROBOTS, FORMAT, SKIP_TYPES,
                                       VALID_HTTP_CODE, SKIP_HOSTS,
                                       getConfig)
 from gdw.stats.utils import parseZCML
 from affinitic.db import IDatabase
+from affinitic.db.utils import initialize_declarative_mappers, initialize_defered_mappers
 from zope.component import getUtility
 from plone.memoize.forever import memoize
 from sqlalchemy import select, func
@@ -47,6 +49,8 @@ def main():
     parseZCML(gdw.stats.scripts, 'scripts.zcml')
     db = getUtility(IDatabase, 'postgres')
     session = db.session
+    initialize_declarative_mappers(DeclarativeBase, db.metadata)
+    initialize_defered_mappers(db.metadata)
     p = apachelog.parser(FORMAT)
     logfilePath, website = getConfig()
     maxDate = getMaxDate(website).max_1

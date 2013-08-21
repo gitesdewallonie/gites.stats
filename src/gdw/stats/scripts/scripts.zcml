@@ -16,6 +16,5 @@
       filename="pgpass"/>
 
   <grok:grok package="gites.db.pg"/>
-  <grok:grok package="gdw.stats.mapper"/>
 
 </configure>
