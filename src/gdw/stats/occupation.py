@@ -8,6 +8,7 @@ Copyright by Affinitic sprl
 from __future__ import division
 from zope.component import getUtility
 from affinitic.db import IDatabase
+from affinitic.db.cache import FromCache
 from gites.db.content import (ReservationProprio,
                               Hebergement)
 from gdw.stats.utils import nbrOfDaysInRange
@@ -27,6 +28,8 @@ class HebergementOccupation(object):
         db = getUtility(IDatabase, name='postgres')
         session = db.session
         query = session.query(ReservationProprio).join('hebergement')
+        query = query.options(
+            FromCache('gdw'))
         query = query.filter(Hebergement.heb_pk == self.hebergement.heb_pk)
         query = query.filter(ReservationProprio.res_date <= self.endDate)
         query = query.filter(ReservationProprio.res_date >= self.startDate)
@@ -43,6 +46,8 @@ class HebergementOccupation(object):
         db = getUtility(IDatabase, name='postgres')
         session = db.session
         query = session.query(ReservationProprio).join('hebergement')
+        query = query.options(
+            FromCache('gdw'))
         query = query.filter(Hebergement.heb_pk == self.hebergement.heb_pk)
         count = query.count()
         session.close()
