@@ -12,8 +12,6 @@ from gites.db.content import (ReservationProprio,
                               Hebergement)
 from gdw.stats.utils import nbrOfDaysInRange
 from gdw.stats.inactive import HebergementInactiveCalculation
-from sqlalchemy.orm import Query
-Query.__len__ = Query.count
 
 
 class HebergementOccupation(object):
@@ -71,7 +69,7 @@ class HebergementsOccupation(object):
 
     @property
     def hebergementCount(self):
-        return len(self.hebergements)
+        return self.hebergements.count()
 
     @property
     def hebergementsActif(self):
