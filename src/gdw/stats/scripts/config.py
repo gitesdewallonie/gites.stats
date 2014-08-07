@@ -49,7 +49,14 @@ ROBOTS = [
 'voila',
 'webbase',
 'zyborg',   # Must be before wisenut
-'wisenutbot']
+'wisenutbot',
+'linguee bot',
+'jyxobot',
+'yandex',
+'ichiro',
+'turnitinbot',
+'psbot',
+'sitesucker']
 
 
 def getConfig():
