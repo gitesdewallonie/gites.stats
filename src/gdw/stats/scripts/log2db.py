@@ -67,7 +67,10 @@ def main():
         date = apachelog.parse_date(data['%t'])
         date = datetime(*time.strptime(date[0], '%Y%m%d%H%M%S')[:6])
         if date <= maxDate:
-	   continue
+            continue
+        code = data['%>s']
+        if int(code) not in VALID_HTTP_CODE:
+            continue
         path = re.match('(.*) (.*) (.*)', data['%r']).group(2)
         path = urlparse.urlparse(path)[2]
         # path : '/hebergement/logement/beauraing/hebid'
@@ -102,9 +105,6 @@ def main():
             continue
         host = data['%h']
         if host in SKIP_HOSTS:
-            continue
-        code = data['%>s']
-        if int(code) not in VALID_HTTP_CODE:
             continue
         cpt += 1
         if cpt % 10000 == 0:
