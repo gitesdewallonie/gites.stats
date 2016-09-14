@@ -35,12 +35,12 @@ def getHebPkFromId(hebId):
     heb = select([Hebergement.heb_pk],
                    Hebergement.heb_id == hebId).execute().fetchone()
     if heb is None:
-       heb = select([Hebergement.heb_pk],
-                    Hebergement.heb_id.like('%%%s%%' % hebId)).execute().fetchall()
-       if heb and len(heb) == 1:
-          heb = heb[0]
-       else:
-          return None
+        heb = select([Hebergement.heb_pk],
+                     Hebergement.heb_id.like('%%%s%%' % hebId)).execute().fetchall()
+        if heb and len(heb) == 1:
+            heb = heb[0]
+        else:
+            return None
     return heb.heb_pk
 
 
