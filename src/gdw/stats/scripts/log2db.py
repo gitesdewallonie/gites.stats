@@ -32,6 +32,7 @@ def getMaxDate(website):
 
 @memoize
 def getHebPkFromId(hebId):
+    hebId = hebId.replace('%20', ' ')  # handle spaces in IDs (#6473)
     heb = select([Hebergement.heb_pk],
                    Hebergement.heb_id == hebId).execute().fetchone()
     if heb is None:
